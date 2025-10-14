@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <algorithm>
 #include <array>
+#include <thread>
 
 #include "argparse/argparse.hpp"
 #include "aes.hpp"
@@ -144,6 +145,7 @@ int encode(Image &image, const std::array<std::uint8_t, 32> &password, const std
     std::cout << "* Encrypted embed with AES-256-CBC" << std::endl;
 
     // Encode the data
+    // Parallelizing this is our primary goal
     image.encode(salt, 16, level);
     image.encode(iv, 16, level, Image::encoded_size(16, Image::EncodingLevel::Low));
     image.encode(encrypted_header.get(), sizeof(Header), level, Image::encoded_size(32, Image::EncodingLevel::Low));
